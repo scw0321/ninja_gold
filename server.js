@@ -3,6 +3,7 @@ var path = require('path');
 var app = express();
 var session = require('express-session');
 var datetime = require('node-datetime')
+var mongoose = require('mongoose');
 app.use(session({
 	secret: 'keyboard',
 	resave: false,
@@ -14,12 +15,31 @@ app.use(session({
 
 var bodyParser = require('body-parser');
 
+
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static(path.join (__dirname, './static')));
+// app.use(express.static(path.join (__dirname, './static')));
+// app.use(express.static(path.join(__dirname + '/public/dist/public')));
+app.use(express.static(path.join(__dirname + '/public/dist/app')));
 
-app.set('views', path.join(__dirname, './views'));
-app.set('view engine', 'ejs');
+// app.set('views', path.join(__dirname, './views'));
+// app.set('views', path.join(__dirname, './views'));
+// app.set('view engine', 'ejs');
+
+//----------MONGOOSE SCHEMA --------------------
+mongoose.connect("mongodb://localhost:27017/ninja_gold")
+const NingjaSchema = new mongoose.Schema({
+		user: {
+			type: String,
+			minlength: 2,
+			required: true
+		},
+		gold_amount:{
+			type: Number
+		}
+
+}, {timestamps:true})
 
 app.get('/', function(req,res)
 {
